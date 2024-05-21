@@ -1,0 +1,58 @@
+* {
+  margin: 0px;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+/*=====ANIMATIONS=====*/
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/*=====ANIMATIONS=====*/
+
+
+.bg-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-image: url(css/SJB-BG.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+.main-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+    text-shadow: 5px 5px 5px black;
+}
+
+.main-container h1{
+    font-size: 60px;
+}
+
+.content-logo{
+    height:300px;
+}
+
+.sjb-loader {
+    border: 16px solid #dddcdc; /* Light grey */
+    border-top: 16px solid #022d44; /* Blue */
+    border-bottom: 16px solid #022d44; /* Blue */
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    animation: spin 1s linear infinite;
+  }
+
