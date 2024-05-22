@@ -15,7 +15,8 @@
 
 <body>
     <div class="bg-image"></div>
-    <div class="main-container">
+    <div class="container-md main-container">
+        <br>
         <br>
         <div class="logo-container">
             <img src="css/sjb-logo.png" class="content-logo" alt="SJB Logo">
