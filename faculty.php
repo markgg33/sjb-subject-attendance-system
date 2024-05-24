@@ -14,43 +14,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg py-3 navigation-bar">
-        <div class="container-lg nav-content">
-            <div class="title-box">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>
-            </div>
 
-            <div class="profile-box">
-                <p class="d-none d-lg-block">Welcome, <!--<?php echo $_SESSION['user_first_name'] ?></p>-->
-                    <?php
-                    //Check if the photo path is available in the session
-                    if (isset($_SESSION['user_photo'])) {
-                        $photoPath = $_SESSION['user_photo'];
-                        // Display the photo using the retrieved path
-                        echo '<img src="' . $photoPath . '" alt="User Photo"  class ="user-photo d-none d-lg-inline">';
-                    } else {
-                        echo 'No photo available!';
-                    }
-                    ?>
-                <div class="btn-group">
-                    <button type="button" class="btn-dropdown dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                    <ul class="dropdown-menu dropdown-menu-end" style="margin-top: 30px;">
-                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <div class="offcanvas offcanvas-start off-sidebar" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <div class="sidebar-logo">
-            <img src="css/sjb-logo.png" alt="">
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <p>Try scrolling the rest of the page to see this option in action.</p>
-        </div>
-    </div>
+
 
 </body>
 

@@ -1,16 +1,7 @@
-.off-sidebar {
-  background-color: #022d44;
-  color: white;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
-.sidebar-logo{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.sidebar-logo img{
-    height: 200px;
-}

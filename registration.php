@@ -115,28 +115,6 @@
 
                 <div class="row gx-3">
                     <div class="col">
-                        <label for="DateOfBirth">Date of Birth:</label>
-                        <input type="date" name="dob" class="form-control" autofocus required>
-                    </div>
-                    <div class="col">
-                        <label for="Password">Password:</label>
-                        <div class="input-group">
-                            <input type="password" name="emp_pass" class="form-control" placeholder="Enter Password" autofocus required>
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label for="ConfirmPassword">Confirm Password:</label>
-                        <div class="input-group">
-                            <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" autofocus required>
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                        </div>
-                    </div>
-                    <div class="mb-3"></div>
-                </div>
-
-                <div class="row gx-3">
-                    <div class="col">
                         <label for="Address">Address:</label>
                         <input type="text" name="address" class="form-control" autofocus required>
                     </div>
@@ -144,13 +122,6 @@
                         <label for="City">City:</label>
                         <div class="input-group">
                             <input type="text" name="city" class="form-control" autofocus required>
-                        </div>
-
-                    </div>
-                    <div class="col">
-                        <label for="State">State:</label>
-                        <div class="input-group">
-                            <input type="text" name="state" class="form-control">
                         </div>
                     </div>
                     <div class="mb-3"></div>
@@ -190,9 +161,12 @@
                     </div>
                     <div class="col">
                         <label for="Department">Department:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="department" autofocus required>
-                        </div>
+                        <select name="department" class="form-select" required>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="General Education">General Education</option>
+                            <option value="AOM">AOM</option>
+                            <option value="HRS">HRS</option>
+                        </select>
                     </div>
                     <div class="mb-3"></div>
                 </div>
