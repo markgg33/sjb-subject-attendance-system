@@ -146,7 +146,7 @@
   box-shadow: 0px 6px 7px -4px rgba(0, 0, 0, 0.4);
 }
 
-.card-inner{
+.card-inner {
   margin-bottom: 10px;
 }
 
@@ -203,17 +203,139 @@
 
 /*----STUDENT PAGE----*/
 
-.table-container{
+.table-container {
   border: 2px solid black;
   border-radius: 5px;
 }
 
-.student-table{
+.student-table {
   text-align: center;
+}
+
+.nav-pagination {
+  margin-top: 10px;
+}
+
+.page-link {
+  color: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: #022d44;
+}
+
+.page-link:hover {
+  background-color: #0983c5;
+  color: white;
+  border: 2px solid black;
 }
 
 /*----END OF STUDENT PAGE----*/
 
+/*----START OF REPORT PAGE----*/
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.report-button {
+  margin-left: 10px;
+  border: none;
+  background-color: #022d44;
+  color: white;
+  height: 60px;
+  width: 60px;
+  border-radius: 5px;
+  transition: background-color 100ms;
+}
+
+.report-button:hover {
+  background-color: #0983c5;
+}
+
+.report-button i {
+  font-size: 20px;
+}
+
+.report-container {
+  display: flex;
+}
+
+.report-container h3 {
+  margin-top: 20px;
+}
+
+.left-report,
+.right-report {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.generated-reports {
+  margin: 10px 0;
+  background-color: #022d44;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+}
+
+.generated-reports p {
+  margin: 20px;
+  font-size: 20px;
+}
+
+/*----END OF REPORT PAGE----*/
+
+/*----START OF RFID PAGE----*/
+
+.subject-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.subject-changer {
+  background-color: #022d44;
+  padding: 50px 50px;
+  border-radius: 5px;
+  color: white;
+}
+
+.subject-changer:hover {
+  background-color: #0983c5;
+}
+
+/*----END OF RFID PAGE----*/
+
+/*---START OF STUDENT REGISTRATION PAGE*/
+
+.reg-container{
+  padding: 20px 50px;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+
+.btn-register {
+  width: 50%;
+  height: 50px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  background-color: #022d44;
+  transition: background-color 200ms;
+}
+
+.btn-form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/*----END OF STUDENT REGISTRATION PAGE*/
+
 /*----END OF MAIN----*/
-
-
