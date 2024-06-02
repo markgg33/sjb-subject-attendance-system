@@ -303,6 +303,7 @@
   padding: 50px 50px;
   border-radius: 5px;
   color: white;
+  transition: background-color 100ms;
 }
 
 .subject-changer:hover {
