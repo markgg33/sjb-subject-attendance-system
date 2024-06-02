@@ -39,6 +39,7 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 60px;
+  height: 100vh;
 }
 
 .logo-container p {
