@@ -1,3 +1,12 @@
+<?php
+
+include "config.php";
+
+session_start();
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +33,7 @@
                 <div class="info-box">
                     <i class="fa-regular fa-user"></i>
                     <div class="user-text">
-                        <p>Welcome, User</p>
+                        <p>Welcome, <?php echo $_SESSION['faculty_first_name'];?></p>
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn-dropdown dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>

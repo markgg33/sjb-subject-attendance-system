@@ -1,3 +1,79 @@
+<!---------FOR REGISTRATION PAGE TEMPLATE (CHANGE SOME VALUES)-------->
+
+<?php
+
+include 'config.php';
+
+if (isset($_POST['submit'])) {
+    // Sanitize and validate input data
+    $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
+    $middle_name = mysqli_real_escape_string($conn, $_POST['middle_name']);
+    $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $gender = $_POST['gender'];
+    $status = $_POST['status'];
+    $nationality = mysqli_real_escape_string($conn, $_POST['nationality']);
+    $dob = $_POST['dob'];
+    $pass = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $city = mysqli_real_escape_string($conn, $_POST['city']);
+    $country = mysqli_real_escape_string($conn, $_POST['country']);
+    $mobile = $_POST['mobile'];
+    $emp_type = $_POST['emp_type'];
+    $joining_date = $_POST['joining_date'];
+    $department = mysqli_real_escape_string($conn, $_POST['department']);
+    $usertype = $_POST['usertype'];
+
+    // Validate if password and confirm password match
+    if ($pass !== $confirm_password) {
+        echo '<script>alert("Password and confirm password do not match.");</script>';
+        exit; // or handle the error in another way
+    }
+
+    // Check if a file has been uploaded
+    if (isset($_FILES['photo'])) {
+        // File upload path
+        $targetDir = "uploads/";
+        $photoName = basename($_FILES["photo"]["name"]);
+        $targetFilePath = $targetDir . $photoName;
+
+        // Move the uploaded file to the specified location
+        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)) {
+            // Insert the file path into the database
+            $insert = "INSERT INTO login_users(first_name, middle_name, last_name, username, email,
+            gender, status, nationality,  dob, password, address, city, country, mobile, emp_type, joining_date, department, photo, usertype) 
+                VALUES ('$first_name', '$middle_name', '$last_name', '$username', '$email', '$gender', '$status', '$nationality',
+                '$dob', '$pass', '$address', '$city', '$country', '$mobile', '$emp_type', '$joining_date', '$department',
+                '$targetFilePath', '$usertype')";
+
+            // Execute the query
+            mysqli_query($conn, $insert);
+
+            // Show success message with JavaScript
+            echo '<script>alert("Account created successfully!");</script>';
+
+            // Redirect to login page after a short delay
+            echo '<script>
+                    setTimeout(function() {
+                        window.location.href = "index.php";
+                    }, 2000); // 2000 milliseconds (2 seconds)
+                  </script>';
+        } else {
+            // Error handling if file upload fails
+            echo "Sorry, there was an error uploading your file.";
+        }
+    } else {
+        // Error handling if no file is uploaded
+        echo "No file uploaded.";
+    }
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,6 +113,12 @@
                         </div>
                     </div>
                     <div class="col">
+                        <label for="MiddleName">Middle Name:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="middle_name" placeholder="E.g: Dela Cruz" autofocus required>
+                        </div>
+                    </div>
+                    <div class="col">
                         <label for="LastName">Last Name:</label>
                         <div class="input-group">
                             <input type="text" class="form-control" name="last_name" placeholder="E.g: Dela Cruz" autofocus required>
@@ -49,7 +131,7 @@
                     <div class="col">
                         <label for="Username">Username:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="emp_username" placeholder="E.g: SJB-001" autofocus required>
+                            <input type="text" class="form-control" name="username" placeholder="E.g: SJB-001" autofocus required>
                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                         </div>
                     </div>
@@ -99,7 +181,7 @@
                     <div class="col">
                         <label for="Password">Password:</label>
                         <div class="input-group">
-                            <input type="password" name="emp_pass" class="form-control" placeholder="Enter Password" autofocus required>
+                            <input type="password" name="password" class="form-control" placeholder="Enter Password" autofocus required>
                             <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                         </div>
                     </div>
@@ -175,7 +257,7 @@
                     <div class="col">
                         <label for="Photo">Photo Upload:</label>
                         <div class="input-group">
-                            <input type="file" name="photo" class="form-control" accept="image/*" autofocus required>
+                            <input type="file" name="photo" class="form-control" accept="image/*">
                             <span class="input-group-text"><i class="fa-solid fa-camera"></i></span>
                         </div>
                     </div>
@@ -183,7 +265,7 @@
                     <div class="col">
                         <label for="AccountType">Account Type:</label>
                         <select name="usertype" class="form-select">
-                            <option value="user">Faculty</option>
+                            <option value="faculty">Faculty</option>
                             <option value="admin" disabled>Admin</option>
                         </select>
                     </div>
@@ -191,7 +273,7 @@
                 </div>
 
                 <div class="btn-form-container">
-                    <button type="submit" class="btn-register">REGISTER</button>
+                    <button type="submit" name="submit" class="btn-register">REGISTER</button>
                 </div>
             </form>
 
