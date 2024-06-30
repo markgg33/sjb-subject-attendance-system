@@ -2,7 +2,11 @@
 
 <?php
 
-include 'config.php';
+include "config.php";
+
+
+//CHANGE VARIABLES INTO LOGIN_USERS TABLE 
+// username, password, email, user_lvl, timestamp
 
 if (isset($_POST['submit'])) {
     // Sanitize and validate input data
@@ -42,7 +46,7 @@ if (isset($_POST['submit'])) {
         // Move the uploaded file to the specified location
         if (move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)) {
             // Insert the file path into the database
-            $insert = "INSERT INTO login_users(first_name, middle_name, last_name, username, email,
+            $insert = "INSERT INTO faculty(first_name, middle_name, last_name, username, email,
             gender, status, nationality,  dob, password, address, city, country, mobile, emp_type, joining_date, department, photo, usertype) 
                 VALUES ('$first_name', '$middle_name', '$last_name', '$username', '$email', '$gender', '$status', '$nationality',
                 '$dob', '$pass', '$address', '$city', '$country', '$mobile', '$emp_type', '$joining_date', '$department',
@@ -71,7 +75,6 @@ if (isset($_POST['submit'])) {
 }
 
 ?>
-
 
 
 <!DOCTYPE html>
@@ -104,6 +107,7 @@ if (isset($_POST['submit'])) {
         <div class="container form-container">
             <h1>REGISTER HERE</h1>
             <br>
+            <!--CHANGE ATTRIBUTES AND VAR NAMES TO THEIR DESIGNATED VARIABLES-->
             <form action="#" class="form-login" method="POST" enctype="multipart/form-data">
                 <div class="row gx-3">
                     <div class="col">

@@ -1,24 +1,22 @@
 <?php
 
-include "config.php";
-
 session_start();
 
-//reference submit
-if (isset($_POST['submit'])) {
+include "config.php";
 
+if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $pass = $_POST['password'];
 
-    $select = "SELECT * FROM login_users WHERE username = '$username' && password = '$pass' ";
-
+    $select = "SELECT * FROM faculty WHERE username = '$username' AND password = '$pass'";
     $result = mysqli_query($conn, $select);
 
     if (mysqli_num_rows($result) > 0) {
-
         $row = mysqli_fetch_array($result);
+
         if ($row['password'] == $pass) {
             if ($row['usertype'] == 'faculty') {
+                $_SESSION['faculty_faculty_id'] = $row['faculty_id'];
                 $_SESSION['faculty_first_name'] = $row['first_name'];
                 $_SESSION['faculty_middle_name'] = $row['middle_name'];
                 $_SESSION['faculty_last_name'] = $row['last_name'];
@@ -38,8 +36,9 @@ if (isset($_POST['submit'])) {
                 $_SESSION['faculty_department'] = $row['department'];
                 $_SESSION['faculty_photo'] = $row['photo'];
                 $_SESSION['faculty_usertype'] = $row['usertype'];
-                header('location: faculty.php');
-            } else if ($row['usertype'] == 'admin') {
+                header('Location: faculty.php');
+                exit();
+            } elseif ($row['usertype'] == 'admin') {
                 $_SESSION['admin_first_name'] = $row['first_name'];
                 $_SESSION['admin_middle_name'] = $row['middle_name'];
                 $_SESSION['admin_last_name'] = $row['last_name'];
@@ -59,22 +58,26 @@ if (isset($_POST['submit'])) {
                 $_SESSION['admin_department'] = $row['department'];
                 $_SESSION['admin_photo'] = $row['photo'];
                 $_SESSION['admin_usertype'] = $row['usertype'];
-                header('location: admin.php');
+                header('Location: admin.php');
+                exit();
             } else {
-                // Password is incorrect, display error message
-                $error = "Incorrect Password. Please try again.";
+                // Usertype is incorrect, display error message
+                $error = "Incorrect Usertype. Please try again.";
                 echo "<script>alert('$error');</script>";
             }
         } else {
-            // Username is incorrect, display error message
-            $error = "Incorrect Username. Please try again.";
+            // Password is incorrect, display error message
+            $error = "Incorrect Password. Please try again.";
             echo "<script>alert('$error');</script>";
         }
+    } else {
+        // Data is incorrect, display error message
+        $error = "Incorrect Data. Please try again.";
+        echo "<script>alert('$error');</script>";
     }
 }
-
-
 ?>
+
 
 
 

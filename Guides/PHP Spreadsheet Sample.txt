@@ -58,3 +58,83 @@ $activeWorksheet->setCellValue('A1', 'Hello World !');
 
 $writer = new Xlsx($spreadsheet);
 $writer->save('hello world.xlsx');
+
+
+
+
+function getSubjectsByFaculty()
+{
+    global $conn;
+    $sql = "SELECT subjects.code, subjects.title FROM subjects 
+            JOIN faculty_subjects ON subjects.id = faculty_subjects.subject_id
+            WHERE faculty_subjects.faculty_id = ?";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        $subjects = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjects[] = [
+                'code' => $row['code'],
+                'title' => $row['title']
+            ];
+        }
+        return $subjects;
+    } else {
+        return [];
+    }
+}
+
+
+ <div class="subject-changer">
+                        <h3>SUBJECT 1</h3>
+                    </div>
+                    <div class="subject-changer">
+                        <h3>SUBJECT 2</h3>
+                    </div>
+                    <div class="subject-changer">
+                        <h3>SUBJECT 3</h3>
+                    </div>
+                    <div class="subject-changer">
+                        <h3>SUBJECT 4</h3>
+                    </div>
+                    <div class="subject-changer">
+                        <h3>SUBJECT 5</h3>
+                    </div>
+
+
+                    // Function to get faculty subjects based on faculty ID WORKING BUT NOT ACCURATE
+function getFacultySubjects()
+{
+    global $conn;
+    $sql = "SELECT subjects.subject_code, subjects.subject_title
+                            FROM faculty_subjects
+                            INNER JOIN subjects ON faculty_subjects.subject_id = subjects.subject_id
+                            WHERE faculty_subjects.faculty_id = faculty_id";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        $subjects = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjects[] = $row;
+        }
+        return $subjects;
+    } else {
+        return [];
+    }
+}
+
+<?php
+
+                    echo "Fetching subjects for faculty ID: " . htmlspecialchars($faculty_id) . "<br>";
+                    // Get the subjects for the logged-in faculty
+                    $facultySubjects = getFacultySubjects();
+                    if (!empty($facultySubjects)) {
+                        foreach ($facultySubjects as $subject) {
+                            echo '<div class="subject-changer">';
+                            echo '<h3>' . htmlspecialchars($subject['subject_title']) . ' (' . htmlspecialchars($subject['subject_code']) . ')</h3>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo "<p>No subjects found for this faculty.</p>";
+                    }
+                    ?>

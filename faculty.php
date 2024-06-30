@@ -1,10 +1,19 @@
 <?php
 
-include "config.php";
-
 session_start();
 
+include "config.php";
+include "functions.php";
+include "pagination.php";
+
+if (isset($_SESSION['faculty_faculty_id'])) {
+    $faculty_id = $_SESSION['faculty_faculty_id'];
+} else {
+    echo "Faculty ID is not set in session.";
+    exit; // Stop further execution if faculty_id is not set
+}
 ?>
+
 
 
 <!DOCTYPE html>
@@ -31,9 +40,19 @@ session_start();
         <header class="header">
             <div class="header-right">
                 <div class="info-box">
-                    <i class="fa-regular fa-user"></i>
+                    <?php
+                    //Check if the photo path is available in the session
+                    if (isset($_SESSION['faculty_photo'])) {
+                        $photoPath = $_SESSION['faculty_photo'];
+                        // Display the photo using the retrieved path
+                        echo '<img src="' . $photoPath . '" alt="User Photo"  class ="user-photo d-none d-lg-inline">';
+                    } else {
+                        echo 'No photo available!';
+                    }
+                    ?>
                     <div class="user-text">
-                        <p>Welcome, <?php echo $_SESSION['faculty_first_name'];?></p>
+                        <p>Welcome, <?php echo $_SESSION['faculty_first_name']; ?></p>
+
                     </div>
                     <div class="btn-group">
                         <button type="button" class="btn-dropdown dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
@@ -97,7 +116,7 @@ session_start();
                             <i class="fa-solid fa-graduation-cap"></i>
                             <p>STUDENTS</p>
                         </div>
-                        <h2>150</h2>
+                        <h2><?php echo getUserCount('students'); ?></h2>
                     </div>
 
                     <div class="card">
@@ -105,7 +124,7 @@ session_start();
                             <i class="fa-solid fa-school"></i>
                             <p>COURSES</p>
                         </div>
-                        <h2>10</h2>
+                        <h2><?php echo getUserCount('courses'); ?></h2>
                     </div>
 
                     <div class="card">
@@ -121,7 +140,7 @@ session_start();
                             <i class="fa-solid fa-book"></i>
                             <p>SUBJECTS</p>
                         </div>
-                        <h2>10</h2>
+                        <h2><?php echo getUserCount('subjects'); ?></h2>
                     </div>
 
                 </div>
@@ -130,12 +149,12 @@ session_start();
 
                     <div class="charts-card">
                         <p class="chart-title">STUDENTS ATTENDANCE STATISTICS</p>
-                        <div id="bar-chart"></div>
+                        <div id="area-chart"></div>
                     </div>
 
                     <div class="charts-card">
                         <p class="chart-title">STUDENT COUNT FOR COURSES</p>
-                        <div id="area-chart"></div>
+                        <div id="pie-chart"></div>
                     </div>
 
                 </div>
@@ -151,11 +170,45 @@ session_start();
                     <h1>STUDENTS</h1>
                 </div>
 
+                <div class="row gx-3">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search by user's preference">
+                            <button type="button" id="searchButton" class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <select id="courseFilter" class="form-control mb-3">
+                                    <option value="">Filter by Course</option>
+                                    <!-- Add your course options here -->
+                                    <option value="Information and Communications Technology">Information and Communications Technology</option>
+                                    <option value="Home Economics">Home Economics</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Hotel and Restaurant Services">Hotel and Restaurant Services</option>
+                                    <option value="Automated Office Management">Automated Office Management</option>
+                                    <option value="BS Hotel and Restaurant Management">BS Hotel and Restaurant Management</option>
+                                    <option value="BS Information Technology">BS Information Technology</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select id="yearFilter" class="form-control mb-3">
+                                    <option value="">Filter by Year Level</option>
+                                    <!-- Add your year level options here -->
+                                    <option value="G12">G12</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="container-fluid table-container">
-                    <table class="table student-table">
+                    <table class="table student-table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">RFID</th>
                                 <th scope="col">Student ID</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Middle Name</th>
@@ -165,29 +218,32 @@ session_start();
                                 <th scope="col">Semester</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">EA23UIO</th>
-                                <td>2022-00130</td>
-                                <td>Mark Francis</td>
-                                <td>Perez</td>
-                                <td>De Guzman</td>
-                                <td>Information Technology</td>
-                                <td>2nd Year</td>
-                                <td>3rd Semester</td>
-                            </tr>
+                        <tbody id="studentTableBody">
+                            <?php
+                            $studentData = getStudentData();
+                            foreach ($studentData as $student) {
+                                echo "<tr>";
+                                echo "<td>{$student['id']}</td>";
+                                echo "<td>{$student['first_name']}</td>";
+                                echo "<td>{$student['middle_name']}</td>";
+                                echo "<td>{$student['last_name']}</td>";
+                                echo "<td>{$student['courses']}</td>";
+                                echo "<td>{$student['year_lvl']}</td>";
+                                echo "<td>{$student['semester']}</td>";
+                                echo "</tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
 
                 <!--REVISE PAGINATION IF NEEDED FOR THE TABLE -MARK -->
                 <nav class="nav-pagination">
-                    <ul class="pagination gap-2">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <ul class="pagination" id="pagination">
+                        <!---li class="page-item"><a class="page-link" href="?page-nr=1" id="firstPage">First</a></li-->
+                        <li class="page-item"><a class="page-link" href="#" id="prevPage">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#" id="nextPage">Next</a></li>
+                        <!----li class="page-item"><a class="page-link" href="?page-nr=<?php echo $pages ?>" id="lastPage">Last</a></li--->
                     </ul>
                 </nav>
             </div>
@@ -253,61 +309,65 @@ session_start();
                     <h1>RFID SCAN</h1>
                 </div>
 
-                <div class="container-fluid subject-container">
-                    <div class="subject-changer">
-                        <h3>SUBJECT 1</h3>
-                    </div>
-                    <div class="subject-changer">
-                        <h3>SUBJECT 2</h3>
-                    </div>
-                    <div class="subject-changer">
-                        <h3>SUBJECT 3</h3>
-                    </div>
-                    <div class="subject-changer">
-                        <h3>SUBJECT 4</h3>
-                    </div>
-                    <div class="subject-changer">
-                        <h3>SUBJECT 5</h3>
-                    </div>
+
+                <div class="main-cards-1">
+                    <?php
+
+                    // Get the subjects for the logged-in faculty
+                    $facultySubjects = getFacultySubjects($faculty_id);
+
+                    //echo "Fetching subjects for faculty ID: " . htmlspecialchars($faculty_id) . "<br>";
+
+                    if (!empty($facultySubjects)) {
+                        foreach ($facultySubjects as $subject) {
+                            echo '<div class="subject-cards">';
+                            echo '<p>' . htmlspecialchars($subject['subject_title']) . ' (' . htmlspecialchars($subject['subject_code']) . ')</p>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo "<p>No subjects found for this faculty.</p>";
+                    }
+                    ?>
                 </div>
 
                 <br>
+                <div class="container-fluid subject-container">
+                    <div class="main-title">
+                        <h1>STUDENTS ATTENDED</h1>
+                    </div>
+                    <div class="container-fluid table-container">
 
-                <div class="main-title">
-                    <h1>STUDENTS ATTENDED</h1>
-                </div>
-                <div class="container-fluid table-container">
-
-                    <table class="table student-table">
-                        <thead>
-                            <tr>
-                                <th scope="col">RFID</th>
-                                <th scope="col">Student ID</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Middle Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Course</th>
-                                <th scope="col">Year Level</th>
-                                <th scope="col">Semester</th>
-                                <th scope="col">Subject Attended</th>
-                                <th scope="col">Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">EA23UIO</th>
-                                <td>2022-00130</td>
-                                <td>Mark Francis</td>
-                                <td>Perez</td>
-                                <td>De Guzman</td>
-                                <td>Information Technology</td>
-                                <td>2nd Year</td>
-                                <td>3rd Semester</td>
-                                <td>Web Development</td>
-                                <td>05/31/2024 || 10:23am</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <table class="table student-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">RFID</th>
+                                    <th scope="col">Student ID</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Middle Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Year Level</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Subject Attended</th>
+                                    <th scope="col">Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">EA23UIO</th>
+                                    <td>2022-00130</td>
+                                    <td>Mark Francis</td>
+                                    <td>Perez</td>
+                                    <td>De Guzman</td>
+                                    <td>Information Technology</td>
+                                    <td>2nd Year</td>
+                                    <td>3rd Semester</td>
+                                    <td>Web Development</td>
+                                    <td>05/31/2024 || 10:23am</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -316,6 +376,15 @@ session_start();
             <!-- Student Registration Page -->
             <div id="student-reg-page" class="page-content">
 
+                <?php
+
+                $Write = "<?php $" . "UIDresult=''; " . "echo $" . "UIDresult;" . " ?>";
+                file_put_contents('UIDContainer.php', $Write);
+
+                ?>
+
+                <script src="interval.js"></script>
+
                 <div class="main-title">
                     <h1>STUDENT REGISTRATION</h1>
                 </div>
@@ -323,16 +392,14 @@ session_start();
                 <br>
 
                 <div class="reg-container">
-                    <form action="#" class="form-login" method="POST" enctype="multipart/form-data">
-                        <div class="row gx-3">
+                    <form action="insertDB.php" class="form-login" method="POST" enctype="multipart/form-data">
+                        <div class="row gx-2">
                             <div class="col">
                                 <p><strong>Please tap your RFID to register</strong></p>
-                                <label for="UID">UID:</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="uid" placeholder="E.g: Juan" autofocus required>
+                                <div class="uid-container">
+                                    <label for="UID">UID: </label>
+                                    <textarea class="textarea-re" name="id" id="getUID" placeholder="" readonly></textarea>
                                 </div>
-                            </div>
-                            <div class="col">
 
                             </div>
                             <div class="mb-5"></div>
@@ -432,7 +499,8 @@ session_start();
                             </div>
                             <div class="col">
                                 <label for="YearLevel">Year Level:</label>
-                                <select name="yr_lvl" class="form-select" required>
+                                <select name="year_lvl" class="form-select" required>
+                                    <option value="Grade 12">Grade 11</option>
                                     <option value="Grade 12">Grade 12</option>
                                     <option value="First Year">First Year</option>
                                     <option value="2nd Year">Second Year</option>
@@ -454,18 +522,20 @@ session_start();
                             <div class="col">
                                 <label for="Courses">Courses:</label>
                                 <select name="courses" class="form-select" required>
+                                    <option value="Information and Communications Technology">Information and Communications Technology</option>
+                                    <option value="Home Economics">Home Economics</option>
                                     <option value="Information Technology">Information Technology</option>
-                                    <option value="Hotel and Restaurant Management">Hotel and Restaurant Management</option>
-                                    <option value="AOM">Automated Office Management</option>
-                                    <option value="HRS">BS HRS</option>
-                                    <option value="BSIT">BS IT</option>
+                                    <option value="Hotel and Restaurant Services">Hotel and Restaurant Services</option>
+                                    <option value="Automated Office Management">Automated Office Management</option>
+                                    <option value="BS Hotel and Restaurant Management">BS Hotel and Restaurant Management</option>
+                                    <option value="BS Information Technology">BS Information Technology</option>
                                 </select>
                             </div>
                             <div class="mb-3"></div>
                         </div>
 
                         <div class="btn-form-container">
-                            <button type="submit" class="btn-register">REGISTER</button>
+                            <button type="submit" name="submit" class="btn-register">REGISTER</button>
                         </div>
                     </form>
                 </div>
@@ -477,69 +547,50 @@ session_start();
         <!-----MAIN------>
 
         <!-----JAVASCRIPT JS------>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.49.1/apexcharts.min.js"></script>
+        <script src="pagination.js"></script>
         <script src="sidebar.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.js"></script>
-
-
         <script>
-            var productData = "";
-            console.log(productData);
-            /*FOR CHARTS*/
+            document.addEventListener("DOMContentLoaded", function() {
+                // Get student count data from PHP
+                var studentCountData = <?php echo json_encode(getStudentCountByCourse()); ?>;
 
-            var barChartOptions = {
-                series: [{
-                    data: productData.map((item) => ({
-                        x: item.name,
-                        y: item.count,
-                    })),
-                }, ],
-                chart: {
-                    type: "bar",
-                    height: 350,
-                    toolbar: {
-                        show: false,
+                var courses = studentCountData.map(function(item) {
+                    return item.course;
+                });
+                var counts = studentCountData.map(function(item) {
+                    return item.count;
+                });
+
+                // Options for the Pie Chart
+                var pieChartOptions = {
+                    chart: {
+                        type: 'pie',
+                        height: '150%'
                     },
-                },
-                colors: [
-                    "rgb(0, 117, 167)",
-                    "rgb(173, 20, 20)",
-                ],
+                    series: counts,
+                    labels: courses,
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 300
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }]
+                };
 
-                plotOptions: {
-                    bar: {
-                        distributed: true,
-                        borderRadius: 4,
-                        horizontal: false,
-                        column: "40%",
-                    },
-                },
-
-                dataLabels: {
-                    enabled: false,
-                },
-
-                legend: {
-                    show: false,
-                },
-
-                xaxis: {
-                    categories: productData.map(item => item.name),
-                },
-
-                yaxis: {
-                    title: {
-                        text: "Quantity",
-                    },
-                },
-            };
-
-            var barChart = new ApexCharts(
-                document.querySelector("#bar-chart"),
-                barChartOptions
-            );
-            barChart.render();
+                // Create the Pie Chart
+                var pieChart = new ApexCharts(document.getElementById('pie-chart'), pieChartOptions);
+                pieChart.render();
+            });
         </script>
+
     </div>
 
 </body>
