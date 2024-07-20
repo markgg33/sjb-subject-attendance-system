@@ -13,8 +13,8 @@ if (isset($_POST['submit'])) {
     $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
     $middle_name = mysqli_real_escape_string($conn, $_POST['middle_name']);
     $last_name = mysqli_real_escape_string($conn, $_POST['last_name']);
-    $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']); //username = FK to login_users
+    $email = mysqli_real_escape_string($conn, $_POST['email']); //email = FK to login_users
     $gender = $_POST['gender'];
     $status = $_POST['status'];
     $nationality = mysqli_real_escape_string($conn, $_POST['nationality']);
